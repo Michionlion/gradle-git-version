@@ -10,16 +10,16 @@ def gitVersion(prefix = "v", includeSnapshot = true) {
   def exitVal = proc.waitFor()
   if (exitVal == 0) {
     def output = proc.text.trim()
+    logger.info("GitVersion: git describe returned '${output}'")
     def split = output.split('-', 2)
     version = split[0].minus(prefix)
-    if (version != output) {
-      def commitString = split[1].split('-')[0]
-      commits = Integer.parseInt(commitString)
+    if (split.length > 1) {
+      commits = split[1].split('-')[0] as int
     } else {
       snapshot=""
     }
   } else {
-    logger.error("Error while determining version (${exitVal}): '${stderr.toString().trim()}'")
+    logger.error("GitVersion: Error while determining version (${exitVal}): '${stderr.toString().trim()}'")
   }
 
   if (commits > 0) {
@@ -29,7 +29,7 @@ def gitVersion(prefix = "v", includeSnapshot = true) {
     version += "-${snapshot}"
   }
 
-  logger.info("Determined version to be ${version}")
+  logger.info("GitVersion: Determined version to be ${version}")
   return version
 }
 
