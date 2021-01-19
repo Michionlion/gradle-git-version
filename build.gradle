@@ -1,5 +1,6 @@
 plugins {
   id "com.gradle.plugin-publish" version "0.12.0"
+  id "com.michionlion.gitver" version "0.0.1"
   id "java-gradle-plugin"
   id "maven-publish"
   id "groovy"
@@ -26,6 +27,7 @@ gradlePlugin {
   plugins {
     gitver {
       id = "${group}.${name}"
+      implementationClass = "com.michionlion.gitver.GitVersionPlugin"
     }
   }
 }
