@@ -1,0 +1,32 @@
+plugins {
+  id "com.gradle.plugin-publish" version "0.12.0"
+  id "java-gradle-plugin"
+  id "maven-publish"
+  id "groovy"
+}
+
+group = "com.michionlion"
+
+logger.lifecycle("\n\u001B[1;36mVERSION ${version}\u001B[0m\n")
+
+pluginBundle {
+  website = "https://github.com/michionlion/gradle-git-version"
+  vcsUrl = "https://github.com/michionlion/gradle-git-version"
+  description = "Automatically sets your version based on configurable git information"
+  tags = ["git", "version", "gitver"]
+
+  plugins {
+    gitver {
+      displayName = "GitVer"
+    }
+  }
+}
+
+gradlePlugin {
+  plugins {
+    gitver {
+      id = "${group}.${name}"
+    }
+  }
+}
+
