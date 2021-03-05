@@ -6,3 +6,16 @@ pluginManagement {
 }
 
 rootProject.name = "gitver"
+
+gradle.ext.gitver = [
+  prefix: "v",
+  stripPrefix: true,
+  includeCommits: true,
+  commitText: "b",
+  includeSnapshot: true,
+  snapshotText: "SNAPSHOT",
+  separatorText: "-",
+  fallbackVersion: "0.0.0",
+  automatic: true,
+  repository: null
+]
