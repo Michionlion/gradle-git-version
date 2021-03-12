@@ -1,4 +1,4 @@
-package com.michionlion.gitver
+package com.wagner.gitver
 
 import org.gradle.api.GradleException
 import org.gradle.api.Plugin
