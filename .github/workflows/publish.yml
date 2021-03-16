@@ -8,6 +8,7 @@ on:
 jobs:
   publish:
     runs-on: ubuntu-latest
+    environment: Gradle Plugin Portal
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
