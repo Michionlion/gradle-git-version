@@ -3,8 +3,13 @@ plugins {
   id "maven-publish"
   id "java-gradle-plugin"
   id "com.gradle.plugin-publish" version "0.13.0"
-  id "com.michionlion.gitver" version "0.0.0"
 }
+
+// load current source as plugin
+def classpaths = [file("src/main/groovy").absolutePath, file("src/main/resources").absolutePath] as String[]
+def engine = new GroovyScriptEngine(classpaths, this.getClass().getClassLoader())
+def gitverPlugin = engine.loadScriptByName("com/wagner/gitver/GitVersionPlugin.groovy")
+apply plugin: gitverPlugin
 
 group = "com.wagner"
 
