@@ -1,7 +1,9 @@
-name: Gradle Plugin
+name: Publish
 
 on:
   push:
+    branches:
+      - main
     tags:
       - v*
 
