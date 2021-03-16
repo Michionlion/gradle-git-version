@@ -15,8 +15,6 @@ group = "com.wagner"
 
 logger.lifecycle("\n\u001B[1;36mVERSION ${version}\u001B[0m\n")
 
-setGradlePluginPortalAccessProperties()
-
 pluginBundle {
   website = "https://github.com/michionlion/gradle-git-version"
   vcsUrl = "https://github.com/michionlion/gradle-git-version"
@@ -31,18 +29,5 @@ gradlePlugin {
       description = "Automatically sets your version based on configurable git information"
       implementationClass = "com.wagner.gitver.GitVersionPlugin"
     }
-  }
-}
-
-
-def setGradlePluginPortalAccessProperties() {
-  def key = System.getenv("GRADLE_PLUGIN_PORTAL_KEY")
-  def secret = System.getenv("GRADLE_PLUGIN_PORTAL_SECRET")
-
-  if (key) {
-    System.properties.setProperty("gradle.publish.key", key)
-  }
-  if (secret) {
-    System.properties.setProperty("gradle.publish.secret", secret)
   }
 }
