@@ -75,10 +75,11 @@ class GitVersionPlugin implements Plugin<Project> {
     def cmd = "git describe --tags --long --match=${cfg.prefix}* --candidates=50"
     def proc = cmd.execute(null, cfg.repository)
     def stderr = new StringBuffer()
-    proc.consumeProcessErrorStream(stderr)
-    def exitVal = proc.waitFor()
-    if (exitVal == 0) {
-      def output = proc.text.trim()
+    def stdout = new StringBuffer()
+    proc.waitForProcessOutput(stdout, stderr)
+    proc.waitForOrKill(10000)
+    if (proc.exitValue() == 0) {
+      def output = stdout.toString().trim()
       logger.info("GitVer: Received '${output}' from git describe")
 
       (version, commits, revision) = parseDescribe(output)
@@ -94,7 +95,7 @@ class GitVersionPlugin implements Plugin<Project> {
       }
     } else {
       // only log to lifecycle to ensure '-q' will only print version
-      logger.lifecycle("GitVer: Error while determining version ('${cmd}' exited with code ${exitVal}): '${stderr.toString().trim()}'")
+      logger.lifecycle("GitVer: Error while determining version ('${cmd}' exited with code ${proc.exitValue()}): '${stderr.toString().trim()}'")
     }
 
     logger.info("GitVer: Determined version to be ${version}")
