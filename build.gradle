@@ -21,7 +21,7 @@ gradlePlugin {
   website = "https://github.com/michionlion/gradle-git-version"
   vcsUrl = "https://github.com/michionlion/gradle-git-version"
   plugins {
-    greetingsPlugin {
+    gitver {
       id = "${group}.${name}"
       implementationClass = "com.wagner.gitver.GitVersionPlugin"
       displayName = "GitVer"
