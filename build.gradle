@@ -1,8 +1,10 @@
 plugins {
+  id "com.gradle.plugin-publish" version "1.2.0"
   id "groovy"
-  id "maven-publish"
-  id "java-gradle-plugin"
-  id "com.gradle.plugin-publish" version "0.13.0"
+}
+
+repositories {
+  mavenCentral()
 }
 
 // load current source as plugin
@@ -15,19 +17,16 @@ group = "com.wagner"
 
 logger.lifecycle("\n\u001B[1;36mVERSION ${version}\u001B[0m\n")
 
-pluginBundle {
+gradlePlugin {
   website = "https://github.com/michionlion/gradle-git-version"
   vcsUrl = "https://github.com/michionlion/gradle-git-version"
-  tags = ["git", "version", "gitver"]
-}
-
-gradlePlugin {
   plugins {
-    gitver {
+    greetingsPlugin {
       id = "${group}.${name}"
+      implementationClass = "com.wagner.gitver.GitVersionPlugin"
       displayName = "GitVer"
       description = "Automatically sets your version based on configurable git information"
-      implementationClass = "com.wagner.gitver.GitVersionPlugin"
+      tags.set(["git", "version", "gitver"])
     }
   }
 }
