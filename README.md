@@ -10,21 +10,23 @@ gradle.ext.gitver = [
   stripPrefix: true,
   includeCommits: true,
   commitText: "b",
+  separatorText: "-",
   includeSnapshot: true,
   snapshotText: "SNAPSHOT",
-  separatorText: "-",
+  includeBranch: true,
+  branchExcludes: ["main","master"],
   fallbackVersion: "unspecified",
   automatic: true,
   repository: null
 ]
 ```
 
-This configuration generates versions like `0.1.0` or `0.1.0-b1-SNAPSHOT` -- the first when the latest commit has a tag with the form `v0.1.0`, the second when the current commit is one commit ahead of that release tag. When no release tags are found, the `fallbackVersion` (`unspecified`) is used. You can override the folder used as the current working directory when running `git describe` with the `repository` key, which defaults (when `null`) to the current project directory.
+This configuration generates versions like `0.1.0` or `0.1.0-b1-defaults-update-SNAPSHOT` -- the first when the latest commit has a tag with the form `v0.1.0`, the second when the current commit is one commit ahead of that release tag. When no release tags are found, the `fallbackVersion` (`unspecified`) is used. You can override the folder used as the current working directory when running `git describe` with the `repository` key, which defaults (when `null`) to the current project directory.
 
 Apply to your project with the below addition to your `plugins` block in `build.gradle`.
 
 ```groovy
 plugins {
-  id "com.wagner.gitver" version "0.1.0"
+  id "com.wagner.gitver" version "0.2.0"
 }
 ```
