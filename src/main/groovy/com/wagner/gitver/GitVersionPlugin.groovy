@@ -109,9 +109,9 @@ class GitVersionPlugin implements Plugin<Project> {
         if (branchName == "HEAD") {
           logger.info("GitVer: HEAD branch detected/fallen back to, not including branch")
         } else if (isNotExcluded(branchName, cfg.branchExcludes)) {
-          version += "${cfg.separatorText}${branchName}"
+          version += "${cfg.separatorText}${sanitize(branchName)}"
         } else {
-          logger.info("GitVer: Excluding branch ${branchName}")
+          logger.info("GitVer: Excluding branch ${sanitize(branchName)}")
         }
       }
       if (cfg.includeSnapshot && cfg.snapshotText && commits > 0) {
@@ -146,5 +146,14 @@ class GitVersionPlugin implements Plugin<Project> {
       logger.error("GitVer: Invalid branchExcludes type: ${excludes.getClass()}")
       return true
     }
+  }
+
+  def sanitize(String branch) {
+    return branch
+      .replaceAll(/[\/\\|+~()=]/, "-")
+      .replaceAll(/-+/, "-")
+      .replaceAll(/[^a-zA-Z0-9-]/, "_")
+      .replaceAll(/_+/, "-")
+      .replaceAll(/[-_]+$/, '')
   }
 }
