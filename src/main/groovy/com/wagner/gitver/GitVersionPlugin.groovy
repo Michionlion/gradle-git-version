@@ -14,9 +14,11 @@ class GitVersionPlugin implements Plugin<Project> {
     stripPrefix: true,
     includeCommits: true,
     commitText: "b",
+    separatorText: "-",
     includeSnapshot: true,
     snapshotText: "SNAPSHOT",
-    separatorText: "-",
+    includeBranch: true,
+    branchExcludes: ["main","master"],
     fallbackVersion: "unspecified",
     automatic: true,
     repository: null
@@ -89,6 +91,29 @@ class GitVersionPlugin implements Plugin<Project> {
       }
       if (cfg.includeCommits && commits > 0) {
         version += "${cfg.separatorText}${cfg.commitText}${commits}"
+      }
+      if (cfg.includeBranch) {
+        def branchName = "HEAD"
+        def branchCmd = "git rev-parse --abbrev-ref HEAD"
+        def branchProc = branchCmd.execute(null, cfg.repository)
+        def branchStdout = new StringBuffer(), branchStderr = new StringBuffer()
+        branchProc.waitForProcessOutput(branchStdout, branchStderr)
+        branchProc.waitForOrKill(10000)
+        if(branchProc.exitValue() == 0) {
+          branchName = branchStdout.toString().trim()
+          logger.info("GitVer: Determined branch to be ${branchName}")
+        } else {
+          logger.lifecycle("${branchCmd} exited with code ${branchProc.exitValue()}: ${branchStderr.toString().trim()}")
+        }
+
+        if (branchName == "HEAD") {
+          logger.info("GitVer: HEAD branch detected/fallen back to, using revision as branch name")
+          version += "${cfg.separatorText}${revision}"
+        } else if (cfg.branchExcludes == null || (!cfg.branchExcludes.equals(branchName) && !cfg.branchExcludes.contains(branchName))) {
+          version += "${cfg.separatorText}${branchName}"
+        } else {
+          logger.info("GitVer: Excluding branch ${branchName}")
+        }
       }
       if (cfg.includeSnapshot && cfg.snapshotText && commits > 0) {
         version += "${cfg.separatorText}${cfg.snapshotText}"

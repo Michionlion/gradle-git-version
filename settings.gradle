@@ -12,9 +12,11 @@ gradle.ext.gitver = [
   stripPrefix: true,
   includeCommits: true,
   commitText: "b",
+  separatorText: "-",
   includeSnapshot: true,
   snapshotText: "SNAPSHOT",
-  separatorText: "-",
+  includeBranch: true,
+  branchExcludes: "main",
   fallbackVersion: "0.0.0",
   automatic: true,
   repository: null
