@@ -107,8 +107,7 @@ class GitVersionPlugin implements Plugin<Project> {
         }
 
         if (branchName == "HEAD") {
-          logger.info("GitVer: HEAD branch detected/fallen back to, using revision as branch name")
-          version += "${cfg.separatorText}${revision}"
+          logger.info("GitVer: HEAD branch detected/fallen back to, not including branch")
         } else if (isNotExcluded(branchName, cfg.branchExcludes)) {
           version += "${cfg.separatorText}${branchName}"
         } else {
