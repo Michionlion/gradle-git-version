@@ -109,7 +109,7 @@ class GitVersionPlugin implements Plugin<Project> {
         if (branchName == "HEAD") {
           logger.info("GitVer: HEAD branch detected/fallen back to, using revision as branch name")
           version += "${cfg.separatorText}${revision}"
-        } else if (cfg.branchExcludes == null || (!cfg.branchExcludes.equals(branchName) && !cfg.branchExcludes.contains(branchName))) {
+        } else if (isNotExcluded(branchName, cfg.branchExcludes)) {
           version += "${cfg.separatorText}${branchName}"
         } else {
           logger.info("GitVer: Excluding branch ${branchName}")
@@ -134,5 +134,18 @@ class GitVersionPlugin implements Plugin<Project> {
     split = [split[2], split[1] as int, split[0]]
     logger.debug("GitVer: parseDescribe = ${output} -> ${split}")
     return split
+  }
+
+  def isNotExcluded(String branch, Object excludes) {
+    if(excludes == null || excludes == false) {
+      return true
+    } else if(excludes instanceof String) {
+      return branch != excludes
+    } else if(excludes instanceof List) {
+      return !excludes.contains(branch)
+    } else {
+      logger.error("GitVer: Invalid branchExcludes type: ${excludes.getClass()}")
+      return true
+    }
   }
 }
